@@ -1,9 +1,10 @@
 {
-	"id": "vault-mcp",
-	"name": "Vault MCP",
-	"version": "0.0.10",
+	"id": "vault-mcp-pro",
+	"name": "Vault MCP Pro",
+	"version": "1.0.0",
 	"minAppVersion": "1.8.0",
-	"description": "Allow an AI to interact with your vault's notes through a self-contained MCP server.",
-	"author": "jlevere & @joshtmerrill",
+	"description": "MCP server for Obsidian with explicit CRUD operations, frontmatter-aware diff editing, and rollback support. Fork of jlevere/obsidian-mcp-plugin.",
+	"author": "Romain Devillez (fork of jlevere & @joshtmerrill)",
+	"authorUrl": "https://github.com/Romain-Devillez",
 	"isDesktopOnly": true
 }
