@@ -13,7 +13,7 @@ A "limit" parameter is available to cap the number of results returned.
 
 export function registerListFilesHandler(app: App, mcpServer: McpServer) {
   mcpServer.tool(
-    "obsidian-mcp-list-files",
+    "vault-mcp-list-files",
     description,
     {
       dir: z

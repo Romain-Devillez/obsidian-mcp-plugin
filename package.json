@@ -1,7 +1,7 @@
 {
-  "name": "obsidian-mcp-plugin",
-  "version": "0.0.10",
-  "description": "Allow an AI to interact with your vault's notes through a self-contained MCP server",
+  "name": "vault-mcp-pro",
+  "version": "1.0.0",
+  "description": "MCP server for Obsidian with explicit CRUD operations, frontmatter-aware diff editing, and rollback support",
   "main": "dist/main.js",
   "types": "main.d.ts",
   "engines": {
@@ -28,7 +28,7 @@
     "ai",
     "plugin"
   ],
-  "author": "jlevere",
+  "author": "Romain Devillez (fork of jlevere)",
   "license": "MIT",
   "devDependencies": {
     "@esbuild-plugins/tsconfig-paths": "^0.1.2",
@@ -65,5 +65,9 @@
     "diff": "^7.0.0",
     "express": "^5.1.0",
     "zod": "^3.25.67"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Romain-Devillez/obsidian-mcp-plugin"
   }
 }

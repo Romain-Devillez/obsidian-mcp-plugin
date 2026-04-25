@@ -2,33 +2,35 @@ import { App, prepareFuzzySearch } from "obsidian";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { SearchResponseItem } from "@types";
-import { getErrorMessage } from "utils/helpers";
+import { getErrorMessage } from "../utils/helpers";
 
 export const description = `
-Performs a fuzzy search across all file names in the vault.
+Performs a fuzzy search contents across all files in the vault.
 
-The search query can be a partial match and will return files whose names best match the query.
-Results are sorted by relevance.
+The search query can be a partial match and will return the names
+of the files with contents that best match the query. Results are
+sorted by relevance.
 
 Returns:
 - files: Array of matching file paths
 `;
 
-export function registerSearchFilenamesHandler(app: App, mcpServer: McpServer) {
+export function registerSearchContentsHandler(app: App, mcpServer: McpServer) {
   mcpServer.tool(
-    "obsidian-mcp-search-filenames",
+    "vault-mcp-search-contents",
     description,
     {
-      query: z.string().describe("Search query for vault filenames"),
+      query: z.string().describe("Search query for vault"),
       limit: z.number().optional().default(5).describe("Maximum number of results to return"),
     },
-    ({ query, limit }) => {
+    async ({ query, limit }) => {
       try {
         const search = prepareFuzzySearch(query);
         const results: SearchResponseItem[] = [];
 
         for (const file of app.vault.getMarkdownFiles()) {
-          const result = search(file.path);
+          const cachedContents = await app.vault.cachedRead(file);
+          const result = search(cachedContents);
 
           if (result) {
             results.push({
