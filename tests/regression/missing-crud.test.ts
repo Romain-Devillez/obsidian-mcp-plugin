@@ -1,22 +1,29 @@
 /**
- * Golden test — Missing CRUD operations
+ * Regression — vault-mcp-pro provides full CRUD via explicit tools.
  *
- * The upstream plugin lacks delete and move/rename tools. As a result,
- * the obsolete note `Plan d'affûtage corporel pré-kétamine.md` had to
- * sit around for hours with a "manually delete me" warning until I
- * resorted to a git clone + git rm workflow.
- *
- * vault-mcp-pro adds two explicit tools:
- *   - delete-file (with rollback support)
- *   - move-file (uses Obsidian fileManager.renameFile to preserve wikilinks)
+ * The upstream plugin lacked delete and move/rename, which forced manual
+ * git workflows for trivial vault operations (eg. removing the obsolete
+ * `Plan d'affûtage corporel pré-kétamine.md` on 2026-04-25).
  */
 
-describe("regression: CRUD must be complete", () => {
-  it("delete-file: must save rollback before deletion", () => {
-    expect(true).toBe(true);
+import { VAULT_TOOLS } from "../../src/tools";
+
+describe("regression: full CRUD coverage", () => {
+  it("exposes delete-file", () => {
+    expect(Object.keys(VAULT_TOOLS)).toContain("vault-mcp-delete-file");
   });
 
-  it("move-file: must preserve wikilinks via Obsidian fileManager", () => {
-    expect(true).toBe(true);
+  it("exposes move-file", () => {
+    expect(Object.keys(VAULT_TOOLS)).toContain("vault-mcp-move-file");
+  });
+
+  it("exposes rollback-edit", () => {
+    expect(Object.keys(VAULT_TOOLS)).toContain("vault-mcp-rollback-edit");
+  });
+
+  it("exposes frontmatter helpers", () => {
+    const names = Object.keys(VAULT_TOOLS);
+    expect(names).toContain("vault-mcp-read-frontmatter");
+    expect(names).toContain("vault-mcp-update-frontmatter");
   });
 });

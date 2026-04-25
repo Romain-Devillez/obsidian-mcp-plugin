@@ -1,4 +1,4 @@
-import { registerReadHandler } from "../../src/vault/read";
+import { registerReadFileHandler } from "../../src/tools/read-file";
 import { App, TFile } from "obsidian";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { ToolCallback } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -38,13 +38,13 @@ describe("Vault Read Handler", () => {
     app = new App();
     mcpServer = { tool: jest.fn() };
     mockAbortSignal = new AbortController().signal;
-    registerReadHandler(app, mcpServer as unknown as McpServer);
+    registerReadFileHandler(app, mcpServer as unknown as McpServer);
     handlerFunction = mcpServer.tool.mock.calls[0][3];
   });
 
   it("registers with the correct name and schema", () => {
     expect(mcpServer.tool).toHaveBeenCalledWith(
-      "obsidian-mcp-read-file",
+      "vault-mcp-read-file",
       expect.any(String),
       expect.objectContaining({
         path: expect.any(Object), // Zod schema object

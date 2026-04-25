@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting, Notice, debounce } from "obsidian";
 import ObsidianMcpPlugin from "./main";
-import { VAULT_TOOLS, TOOL_DESCRIPTIONS } from "./vault/index";
+import { VAULT_TOOLS, TOOL_DESCRIPTIONS } from "./tools/index";
 import { VAULT_RESOURCES, RESOURCE_DESCRIPTIONS } from "./resources";
 import { SessionInfo } from "./types";
 

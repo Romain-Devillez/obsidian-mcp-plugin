@@ -1,44 +1,33 @@
 /**
- * Golden test — Behavior Documentation
+ * Regression — upsert-file dropped, replaced by 3 explicit tools.
  *
- * The upstream `upsert-file` tool silently appends to existing files. This is
- * documented in src/vault/upsert.ts but it's a footgun for AI agents that
- * naturally call upsert assuming "create or update" semantics.
+ * Real-world failure on 2026-04-25 11:25 CEST:
+ *   I called upsert on `Règle du délai 24h.md` twice in the same session,
+ *   which silently appended the full content a second time, producing a
+ *   224-line file with duplicated frontmatter and duplicated body.
  *
- * Real-world failure observed on 2026-04-25 11:25 CEST: I called upsert on
- * `Règle du délai 24h.md` twice during the same session, which appended the
- * full content a second time and produced a 224-line file with duplicated
- * frontmatter and duplicated body.
- *
- * Resolution: in vault-mcp-pro we drop `upsert` entirely and expose three
- * explicit tools:
- *   - create-file (errors if exists)
- *   - replace-file (errors if missing)
- *   - append-to-file (errors if missing)
- *
- * This test documents the new contract.
+ * Resolution in vault-mcp-pro:
+ *   - upsert-file removed entirely.
+ *   - Three new tools force explicit intent:
+ *       create-file:    error if path exists
+ *       replace-file:   error if path missing
+ *       append-to-file: error if path missing
  */
 
-describe("regression: write tools must have explicit semantics", () => {
-  it("create-file: must fail if path exists", () => {
-    // Implementation lands in Phase 3:
-    //   import { createFile } from "../../src/tools/create-file";
-    //   await expect(createFile(app, "existing.md", "x")).rejects.toThrow(/already exists/);
-    expect(true).toBe(true); // placeholder
+import { VAULT_TOOLS } from "../../src/tools";
+
+describe("regression: write tools have explicit semantics", () => {
+  it("VAULT_TOOLS does not export an upsert tool anymore", () => {
+    const names = Object.keys(VAULT_TOOLS);
+    expect(names).not.toContain("vault-mcp-upsert-file");
+    expect(names).not.toContain("obsidian-mcp-upsert-file");
   });
 
-  it("replace-file: must fail if path is missing", () => {
-    // await expect(replaceFile(app, "missing.md", "x")).rejects.toThrow(/not found/);
-    expect(true).toBe(true);
-  });
-
-  it("append-to-file: must fail if path is missing (no auto-create)", () => {
-    // await expect(appendToFile(app, "missing.md", "x")).rejects.toThrow(/not found/);
-    expect(true).toBe(true);
-  });
-
-  it("upsert-file tool must NOT exist anymore", () => {
-    // We will assert that no exported registerUpsertHandler exists in vault-mcp-pro.
-    expect(true).toBe(true);
+  it("VAULT_TOOLS exports create / replace / append explicit tools", () => {
+    const names = Object.keys(VAULT_TOOLS);
+    expect(names).toContain("vault-mcp-create-file");
+    expect(names).toContain("vault-mcp-replace-file");
+    expect(names).toContain("vault-mcp-append-to-file");
+    expect(names).toContain("vault-mcp-prepend-to-file");
   });
 });
